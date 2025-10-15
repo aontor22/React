@@ -1,25 +1,22 @@
-import React from 'react'
-import { useEffect } from 'react';
+import React from 'react';
 
-// movie api : 23eea695
-const Api_Url = 'http://www.omdbapi.com/?apikey=23eea695'
-
-const Movies = () => {
-    const searchMovies = async (title) => {
-        const response = await fetch(`${Api_Url}&s=${title}`);
-
-        const data = await response.json();
-        console.log(data.Search);
-    }
-
-    useEffect(() => {
-        searchMovies('Superman');
-    }, []);
+const MovieCard = ({ movie: { imdbID, Year, Poster, Title, Type } }) => {
     return (
-        <div>
+        <div className="movie" key={imdbID}>
+            <div>
+                <p>{Year}</p>
+            </div>
 
+            <div>
+                <img src={Poster !== "N/A" ? Poster : "https://via.placeholder.com/400"} alt={Title} />
+            </div>
+
+            <div>
+                <span>{Type}</span>
+                <h3>{Title}</h3>
+            </div>
         </div>
-    )
+    );
 }
 
-export default Movies
+export default MovieCard;

@@ -1,32 +1,56 @@
-import { useState, useEffect } from 'react'
-import './App.css'
-import UserList from './components/UserList'
-import Post from './components/Post'
-import Movies from './components/Movies'
+import React, { useState, useEffect } from "react";
 
+import Movies from "./components/Movies";
+import SearchIcon from "./assets/search.svg";
+import "./App.css";
 
+const API_URL = "http://www.omdbapi.com?apikey=b6003d8a";
 
-function App() {
-  // const [count, setCount] = useState(0)
+const App = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    searchMovies("Batman");
+  }, []);
+
+  const searchMovies = async (title) => {
+    const response = await fetch(`${API_URL}&s=${title}`);
+    const data = await response.json();
+
+    setMovies(data.Search);
+  };
 
   return (
-    // <div style={{ maxWidth: 900, margin: "24px auto", fontFamily: "system-ui, sans-serif" }}>
-    //   <h1>Singleton vs Lazy Singleton (React Demo)</h1>
-    //   <p style={{ color: "#555" }}>
-    //     The eager singleton is created immediately when the module loads.
-    //     The lazy singleton is created only when <code>getApiClient()</code> is first called.
-    //   </p>
-    //   <div style={{ display: "grid", gap: 16, gridTemplateColumns: "1fr 1fr" }}>
-    //     <UserList />
-    //     <Post />
-    //   </div>
-    // </div>
+    <div className="app">
+      <h1>MovieLand</h1>
 
-  <>
-    <h2>Movies</h2>
-    <Movies />
-  </>
-  )
-}
+      <div className="search">
+        <input
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search for movies"
+        />
+        <img
+          src={SearchIcon}
+          alt="search"
+          onClick={() => searchMovies(searchTerm)}
+        />
+      </div>
 
-export default App
+      {movies?.length > 0 ? (
+        <div className="container">
+          {movies.map((movie) => (
+            <Movies movie={movie} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty">
+          <h2>No movies found</h2>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
