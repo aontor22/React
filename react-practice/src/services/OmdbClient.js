@@ -1,4 +1,4 @@
-const BASE = "http://www.omdbapi.com/";
+const BASE = "https://www.omdbapi.com/";
 
 let _instance = null;
 let _counter = 0;
